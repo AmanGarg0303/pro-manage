@@ -4,6 +4,7 @@ import Auth from "./pages/auth/Auth";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import Analytics from "./pages/analytics/Analytics";
+import PageNotFound from "./pages/pageNotFound/PageNotFound";
 
 function App() {
   const currentUser = true;
@@ -85,10 +86,10 @@ function App() {
         },
       ],
     },
-    // {
-    //   path: "/*",
-    //   element: <PageNotFound />,
-    // },
+    {
+      path: "/*",
+      element: <PageNotFound />,
+    },
   ]);
   return (
     <div className="App">
