@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import Analytics from "./pages/analytics/Analytics";
 import PageNotFound from "./pages/pageNotFound/PageNotFound";
+import Settings from "./pages/settings/Settings";
 
 function App() {
   const currentUser = true;
@@ -83,6 +84,10 @@ function App() {
         {
           path: "/dashboard/analytics",
           element: currentUser ? <Analytics /> : <Auth />,
+        },
+        {
+          path: "/dashboard/settings",
+          element: currentUser ? <Settings /> : <Auth />,
         },
       ],
     },
