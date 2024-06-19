@@ -16,6 +16,9 @@
     color: white;
     font-weight: 600;
     cursor: pointer;
+    &:hover {
+      filter: brightness(1.09);
+    }
   }
 
   .cancel {

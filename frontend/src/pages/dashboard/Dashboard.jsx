@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./dashboard.module.css";
 import numToMonth from "../../utils/numToMonth";
-import { Cards } from "../../components/cards/Cards";
 import { Card } from "../../components/card/Card";
+import { IoPeopleOutline } from "react-icons/io5";
+import { AddPeopleModal } from "../../components/addPeopleModal/AddPeopleModal";
 
 const Dashboard = () => {
   const date = new Date().getDate();
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
+
+  const [openAddPeopleModal, setOpenAddPeopleModal] = useState(false);
 
   return (
     <div className={styles.container}>
@@ -19,10 +22,26 @@ const Dashboard = () => {
       </div>
 
       <div className={styles.content}>
-        <p style={{ fontSize: "1.6rem", fontWeight: "600" }}>Board</p>
+        <div className={styles.miniContent}>
+          <p className={styles.board}>Board</p>
+
+          <div
+            className={styles.addPeople}
+            onClick={() => setOpenAddPeopleModal(true)}
+          >
+            <IoPeopleOutline />
+            <p>Add People</p>
+          </div>
+
+          <AddPeopleModal
+            openAddPeopleModal={openAddPeopleModal}
+            setOpenAddPeopleModal={setOpenAddPeopleModal}
+          />
+        </div>
+
         <select>
           <option value="today">Today</option>
-          <option selected value="week">
+          <option defaultValue={"week"} value="week">
             This Week
           </option>
           <option value="month">This Month</option>
