@@ -31,7 +31,7 @@ function App() {
         >
           <Sidebar />
         </div>
-        <div style={{ flex: 5, marginLeft: "15rem" }}>
+        <div style={{ flex: 5, marginLeft: "15rem", overflow: "hidden" }}>
           <Outlet />
         </div>
       </div>
@@ -60,7 +60,9 @@ function App() {
                 >
                   <Sidebar />
                 </div>
-                <div style={{ flex: 5, marginLeft: "15rem" }}>
+                <div
+                  style={{ flex: 5, marginLeft: "15rem", overflow: "hidden" }}
+                >
                   <Dashboard />
                 </div>
               </div>

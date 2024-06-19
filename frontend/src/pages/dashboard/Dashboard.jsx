@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./dashboard.module.css";
 import numToMonth from "../../utils/numToMonth";
+import { Cards } from "../../components/cards/Cards";
+import { Card } from "../../components/card/Card";
 
 const Dashboard = () => {
   const date = new Date().getDate();
@@ -25,6 +27,13 @@ const Dashboard = () => {
           </option>
           <option value="month">This Month</option>
         </select>
+      </div>
+
+      <div className={styles.mainCards}>
+        <Card name="Backlog" />
+        <Card name="To do" />
+        <Card name="In progress" />
+        <Card name="Done" />
       </div>
     </div>
   );
