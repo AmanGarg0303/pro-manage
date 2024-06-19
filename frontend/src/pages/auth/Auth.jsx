@@ -18,7 +18,7 @@ const Auth = () => {
       </div>
 
       <div className={styles.rightSide}>
-        {activeAuthComp === 0 ? <Login /> : <Register />}
+        {JSON.parse(activeAuthComp) === 0 ? <Login /> : <Register />}
       </div>
     </div>
   );
