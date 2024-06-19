@@ -6,9 +6,11 @@ import SettingsIcon from "../../assets/setting.svg";
 import BoardIcon from "../../assets/board.svg";
 import AnalyticIcon from "../../assets/analytic.svg";
 import { IoLogOutOutline } from "react-icons/io5";
+import { LogoutModal } from "../logoutModal/LogoutModal";
 
 export const Sidebar = () => {
   const { pathname } = useLocation();
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
   return (
     <div className={styles.sidebar}>
@@ -52,10 +54,18 @@ export const Sidebar = () => {
         </Link>
       </div>
 
-      <div className={styles.logoutDiv}>
+      <div
+        className={styles.logoutDiv}
+        onClick={() => setOpenLogoutModal(true)}
+      >
         <IoLogOutOutline color="red" size={25} style={{ cursor: "pointer" }} />
         <button>Logout</button>
       </div>
+
+      <LogoutModal
+        openLogoutModal={openLogoutModal}
+        setOpenLogoutModal={setOpenLogoutModal}
+      />
     </div>
   );
 };
