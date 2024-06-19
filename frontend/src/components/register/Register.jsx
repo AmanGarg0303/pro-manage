@@ -5,10 +5,13 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineLock } from "react-icons/md";
+import { useActiveAuthComp } from "../../providers/activeAuthComp";
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
+
+  const { activeAuthComp, setActiveAuthComp } = useActiveAuthComp();
 
   return (
     <div className={styles.container}>
@@ -71,7 +74,11 @@ export const Register = () => {
 
         <p className={styles.haveAnAcc}>Have an account?</p>
 
-        <button className={styles.loginBtn} type="button">
+        <button
+          className={styles.loginBtn}
+          type="button"
+          onClick={() => setActiveAuthComp(0)}
+        >
           Log in
         </button>
       </form>

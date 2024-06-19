@@ -3,9 +3,12 @@ import styles from "./login.module.css";
 import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlineLock } from "react-icons/md";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { useActiveAuthComp } from "../../providers/activeAuthComp";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const { activeAuthComp, setActiveAuthComp } = useActiveAuthComp();
 
   return (
     <div className={styles.container}>
@@ -44,7 +47,11 @@ export const Login = () => {
 
         <p className={styles.noAcc}>Have no account yet?</p>
 
-        <button className={styles.registerBtn} type="button">
+        <button
+          className={styles.registerBtn}
+          type="button"
+          onClick={() => setActiveAuthComp(1)}
+        >
           Register
         </button>
       </form>
