@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./task.module.css";
 import { GoDotFill } from "react-icons/go";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -6,6 +6,8 @@ import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
 
 export const Task = () => {
+  const [openTaskSetting, setOpenTaskSetting] = useState(false);
+
   return (
     <div className={styles.singleTask}>
       <div className={styles.topbar}>
@@ -15,7 +17,19 @@ export const Task = () => {
           <p className={styles.assignedTo}>AK</p>
         </div>
 
-        <HiDotsHorizontal size={20} />
+        <HiDotsHorizontal
+          size={20}
+          onClick={() => setOpenTaskSetting(!openTaskSetting)}
+          style={{ cursor: "pointer" }}
+        />
+
+        {openTaskSetting && (
+          <div className={styles.taskSettings}>
+            <p>Edit</p>
+            <p>Share</p>
+            <p style={{ color: "red" }}>Delete</p>
+          </div>
+        )}
       </div>
 
       <div className={styles.header}>

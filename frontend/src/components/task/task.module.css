@@ -5,6 +5,7 @@
   margin: 1rem 0;
 
   .topbar {
+    position: relative;
     display: flex;
     justify-content: space-between;
 
@@ -26,6 +27,29 @@
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+    }
+
+    .taskSettings {
+      position: absolute;
+      background-color: white;
+      /* padding: 0.3rem 0.8rem; */
+      right: 1rem;
+      top: 1rem;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      border-radius: 8px;
+      font-size: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem 0;
+      overflow: hidden;
+
+      p {
+        padding: 0.3rem 2rem 0.3rem 0.8rem;
+        cursor: pointer;
+        &:hover {
+          background-color: #edf5fd;
+        }
       }
     }
   }
