@@ -4,9 +4,12 @@ import { GoDotFill } from "react-icons/go";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
+import { DeleteTaskModal } from "../deleteTaskModal/DeleteTaskModal";
 
 export const Task = () => {
   const [openTaskSetting, setOpenTaskSetting] = useState(false);
+
+  const [openDeleteTaskModal, setOpenDeleteTaskModal] = useState(false);
 
   return (
     <div className={styles.singleTask}>
@@ -27,9 +30,19 @@ export const Task = () => {
           <div className={styles.taskSettings}>
             <p>Edit</p>
             <p>Share</p>
-            <p style={{ color: "red" }}>Delete</p>
+            <p
+              style={{ color: "red" }}
+              onClick={() => setOpenDeleteTaskModal(true)}
+            >
+              Delete
+            </p>
           </div>
         )}
+
+        <DeleteTaskModal
+          openDeleteTaskModal={openDeleteTaskModal}
+          setOpenDeleteTaskModal={setOpenDeleteTaskModal}
+        />
       </div>
 
       <div className={styles.header}>
