@@ -4,6 +4,12 @@ import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlineLock } from "react-icons/md";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { useActiveAuthComp } from "../../providers/activeAuthComp";
+import { LoadingSVG } from "../../assets/LoadingSvg";
+import newRequest from "../../utils/newRequest";
+import { loginSuccess } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const { setActiveAuthComp } = useActiveAuthComp();
@@ -20,6 +26,9 @@ export const Login = () => {
   const [errorResponse, setErrorResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -35,7 +44,27 @@ export const Login = () => {
       error.passwordErr = "Password is required!";
       return;
     }
+
+    try {
+      setLoading(true);
+
+      const res = await newRequest.post("auth/login", {
+        email,
+        password,
+      });
+
+      dispatch(loginSuccess(res?.data));
+      toast.success("Logged in successfully!");
+      setLoading(false);
+      navigate("/dashboard");
+    } catch (error) {
+      setErrorResponse(error?.response?.data?.message);
+      console.log(error);
+      setLoading(false);
+    }
   };
+
+  console.log(errorResponse);
 
   return (
     <div className={styles.container}>
@@ -73,8 +102,8 @@ export const Login = () => {
 
         <p className={styles.error}>{errorResponse}</p>
 
-        <button className={styles.loginBtn} type="submit">
-          Log in
+        <button disabled={loading} className={styles.loginBtn} type="submit">
+          {loading ? <>{LoadingSVG}</> : "Log in"}
         </button>
 
         <p className={styles.noAcc}>Have no account yet?</p>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./sidebar.module.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LogoIcon from "../../assets/logo.svg";
 import SettingsIcon from "../../assets/setting.svg";
 import BoardIcon from "../../assets/board.svg";

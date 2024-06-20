@@ -4,6 +4,7 @@ import numToMonth from "../../utils/numToMonth";
 import { Card } from "../../components/card/Card";
 import { IoPeopleOutline } from "react-icons/io5";
 import { AddPeopleModal } from "../../components/addPeopleModal/AddPeopleModal";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const date = new Date().getDate();
@@ -12,10 +13,12 @@ const Dashboard = () => {
 
   const [openAddPeopleModal, setOpenAddPeopleModal] = useState(false);
 
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
-        <h1 style={{ fontSize: "1.4rem" }}>Welcome! Aman</h1>
+        <h1 style={{ fontSize: "1.4rem" }}>Welcome! {currentUser?.username}</h1>
         <p style={{ color: "gray", fontSize: "1.2rem" }}>
           {date} {numToMonth(month)}, {year}
         </p>

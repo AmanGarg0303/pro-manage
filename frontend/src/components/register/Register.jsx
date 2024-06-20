@@ -5,6 +5,12 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineLock } from "react-icons/md";
 import { useActiveAuthComp } from "../../providers/activeAuthComp";
+import { loginSuccess } from "../../redux/userSlice";
+import newRequest from "../../utils/newRequest";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { LoadingSVG } from "../../assets/LoadingSvg";
 
 export const Register = () => {
   const { setActiveAuthComp } = useActiveAuthComp();
@@ -23,8 +29,12 @@ export const Register = () => {
     confirmPasswordErr: "",
   });
 
+  const navigate = useNavigate();
+
   const [errorResponse, setErrorResponse] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -53,6 +63,25 @@ export const Register = () => {
     if (password !== confirmPassword) {
       error.confirmPasswordErr = "Password and Confirm Password are not same!";
       return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await newRequest.post("auth/register", {
+        username,
+        email,
+        password,
+      });
+
+      dispatch(loginSuccess(res?.data));
+      toast.success("User registered successfully!");
+      setLoading(false);
+      navigate("/dashboard");
+    } catch (error) {
+      setErrorResponse(error?.response?.data?.message);
+      console.log(error);
+      setLoading(false);
     }
   };
   return (
@@ -120,8 +149,8 @@ export const Register = () => {
 
         <p className={styles.error}>{errorResponse}</p>
 
-        <button className={styles.registerBtn} type="submit">
-          Register
+        <button disabled={loading} className={styles.registerBtn} type="submit">
+          {loading ? <>{LoadingSVG}</> : "Register"}
         </button>
 
         <p className={styles.haveAnAcc}>Have an account?</p>

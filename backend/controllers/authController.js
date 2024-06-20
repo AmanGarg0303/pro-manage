@@ -17,12 +17,12 @@ export const registerUser = async (req, res, next) => {
 
     if (username.length < 4) {
       return next(
-        createError(400, "Username should be atleast 4 charaacters long.")
+        createError(400, "Username should be atleast 4 characters long.")
       );
     }
     if (password.length < 5) {
       return next(
-        createError(400, "Password should be atleast 5 charaacters long.")
+        createError(400, "Password should be atleast 5 characters long.")
       );
     }
 
@@ -34,6 +34,7 @@ export const registerUser = async (req, res, next) => {
 
     const newUser = await User.create({
       username,
+      email,
       password: hashedPass,
     });
 

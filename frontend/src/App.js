@@ -7,9 +7,11 @@ import Analytics from "./pages/analytics/Analytics";
 import PageNotFound from "./pages/pageNotFound/PageNotFound";
 import Settings from "./pages/settings/Settings";
 import PublicSharedTask from "./pages/publicSharedTask/PublicSharedTask";
+import { useSelector } from "react-redux";
 
 function App() {
-  const currentUser = true;
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
 
   const HomeLayout = () => {
     return (
