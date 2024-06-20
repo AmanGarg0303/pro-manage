@@ -49,3 +49,27 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const assignPeople = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return next(createError(404, "User not found!"));
+    }
+    const { email } = req.body;
+
+    if (email === user.email) {
+      return next(createError(400, "Yours and assignee email cannot be same!"));
+    }
+
+    if (user.myAssignies.includes(email)) {
+      return next(createError(400, "This email is already added!"));
+    }
+
+    await user.updateOne({ $push: { myAssignies: email } });
+
+    res.status(200).json({ message: "Assignie added successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
