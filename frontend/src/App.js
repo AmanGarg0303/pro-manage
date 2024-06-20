@@ -6,6 +6,7 @@ import { Sidebar } from "./components/sidebar/Sidebar";
 import Analytics from "./pages/analytics/Analytics";
 import PageNotFound from "./pages/pageNotFound/PageNotFound";
 import Settings from "./pages/settings/Settings";
+import PublicSharedTask from "./pages/publicSharedTask/PublicSharedTask";
 
 function App() {
   const currentUser = true;
@@ -96,6 +97,10 @@ function App() {
     {
       path: "/*",
       element: <PageNotFound />,
+    },
+    {
+      path: "/share/:taskId",
+      element: <PublicSharedTask />,
     },
   ]);
   return (
