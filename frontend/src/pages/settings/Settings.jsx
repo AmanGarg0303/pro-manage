@@ -4,13 +4,21 @@ import { FaRegUser } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlineLock } from "react-icons/md";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { logout } from "../../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import newRequest from "../../utils/newRequest";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { LoadingSVG } from "../../assets/LoadingSvg";
 
 const Settings = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const { currentUser } = useSelector((state) => state.user);
+
+  const [username, setUsername] = useState(currentUser?.username);
+  const [email, setEmail] = useState(currentUser?.email);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -24,7 +32,10 @@ const Settings = () => {
   const [errorResponse, setErrorResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleUpdateSettings = (e) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleUpdateSettings = async (e) => {
     e.preventDefault();
 
     const error = {};
@@ -53,6 +64,33 @@ const Settings = () => {
       error.newPasswordErr = "Old and new Password are same!";
       return;
     }
+
+    if (!oldPassword && !newPassword) {
+      if (email === currentUser.email || username === currentUser.username) {
+        setErrorResponse("Nothing to update!");
+        return;
+      }
+    }
+
+    try {
+      console.log(username, email, oldPassword, newPassword);
+      setLoading(true);
+      const res = await newRequest.put("user/update", {
+        username,
+        email,
+        oldPassword,
+        newPassword,
+      });
+
+      toast.success(res?.data?.message);
+      setLoading(false);
+      dispatch(logout());
+      navigate("/");
+    } catch (error) {
+      console.log("error");
+      setErrorResponse(error?.response?.data?.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,6 +104,7 @@ const Settings = () => {
             <input
               type="text"
               placeholder="Username"
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
@@ -78,6 +117,7 @@ const Settings = () => {
             <input
               type="email"
               placeholder="Email"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -120,8 +160,8 @@ const Settings = () => {
 
         <p className={styles.error}>{errorResponse}</p>
 
-        <button className={styles.updateBtn} type="submit">
-          Update
+        <button disabled={loading} className={styles.updateBtn} type="submit">
+          {loading ? <>{LoadingSVG}</> : "Update"}
         </button>
       </form>
     </div>

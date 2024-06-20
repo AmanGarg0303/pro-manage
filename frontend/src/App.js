@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+  // console.log(currentUser);
 
   const HomeLayout = () => {
     return (
