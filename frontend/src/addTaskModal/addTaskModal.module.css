@@ -1,0 +1,154 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem 0;
+
+  .taskTitle {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-size: 14px;
+    }
+
+    input {
+      outline: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      border: 1.5px solid rgb(207, 204, 204);
+    }
+  }
+
+  .priorities {
+    display: flex;
+    align-items: center;
+    gap: 0 0.4rem;
+
+    p {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .priority {
+      all: unset;
+      display: flex;
+      align-items: center;
+      gap: 0 0.5rem;
+      white-space: nowrap;
+      padding: 0.2rem 0.4rem 0.2rem 0.2rem;
+      border: 1px solid rgb(207, 204, 204);
+      border-radius: 8px;
+      &:hover {
+        cursor: pointer;
+        background-color: rgb(239, 235, 235);
+      }
+    }
+  }
+
+  .assignTo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 1rem;
+
+    p {
+      white-space: nowrap;
+    }
+
+    select {
+      width: 100%;
+      outline: none;
+      border: 1px solid rgb(207, 204, 204);
+      border-radius: 4px;
+      color: gray;
+      padding: 0.4rem 1rem;
+    }
+  }
+
+  .addNewTaskContainer {
+    .allInputs {
+      margin-top: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem 0;
+
+      .singleInput {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0 0.5rem;
+        border: 1.5px solid rgb(220, 216, 216);
+        border-radius: 10px;
+        padding: 0.4rem 0.5rem;
+
+        .mainInp {
+          display: flex;
+          align-items: center;
+          gap: 0 0.4rem;
+
+          .taskContent {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    .addNewTask {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0 1rem;
+      border: 1.5px solid rgb(207, 204, 204);
+      padding: 0.4rem;
+      color: gray;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  }
+
+  .btns {
+    display: flex;
+    justify-content: space-between;
+
+    .dueDateBtn {
+      margin-top: 1rem;
+      border: 1px solid gray;
+      padding: 0.4rem 2.5rem;
+      border-radius: 8px;
+      color: gray;
+      font-weight: 600;
+      cursor: pointer;
+      background-color: white;
+    }
+
+    .cancelBtn {
+      margin-top: 1rem;
+      border: 1px solid var(--btn-red);
+      padding: 0.4rem 3rem;
+      border-radius: 8px;
+      color: var(--btn-red);
+      font-weight: 600;
+      cursor: pointer;
+      background-color: white;
+    }
+
+    .saveBtn {
+      margin-top: 1rem;
+      margin-left: 1rem;
+      background-color: var(--primary-blue);
+      padding: 0.4rem 3rem;
+      border-radius: 8px;
+      border: none;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      &:hover {
+        filter: brightness(1.09);
+      }
+    }
+  }
+}
+
+.asterik {
+  color: red;
+}
