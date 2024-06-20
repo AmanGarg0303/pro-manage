@@ -1,10 +1,7 @@
 import React from "react";
 import styles from "./publicSharedTask.module.css";
 import LogoIcon from "../../assets/logo.svg";
-import { Task } from "../../components/task/Task";
 import { GoDotFill } from "react-icons/go";
-import { HiDotsHorizontal } from "react-icons/hi";
-import { FaAngleDown } from "react-icons/fa6";
 
 const PublicSharedTask = () => {
   return (

@@ -1,12 +1,14 @@
 .container {
   width: 100vw;
   height: 100vh;
-  overflow-x: hidden;
+  overflow: hidden;
+  padding: 1rem;
 
   .heading {
     display: flex;
+    align-items: center;
     gap: 0 1rem;
-    padding: 1rem 3rem;
+    padding: 0rem 2rem;
 
     img {
       width: 2rem;
@@ -75,8 +77,8 @@
         display: flex;
         flex-direction: column;
         gap: 0.5rem 0;
-        overflow-y: scroll;
-        height: 55vh;
+        overflow-y: auto;
+        height: 59vh;
 
         .singleInput {
           display: flex;
@@ -131,6 +133,16 @@
           color: white;
         }
       }
+    }
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .heading {
+    padding: 0.8rem 1rem !important;
+
+    .mainTitle {
+      font-size: 1.5rem;
     }
   }
 }
