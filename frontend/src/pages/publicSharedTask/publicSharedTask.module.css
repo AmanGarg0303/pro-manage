@@ -28,6 +28,7 @@
       border-radius: 8px;
       background-color: white;
       margin: 0.6rem 0;
+      min-width: 22rem;
 
       .topbar {
         position: relative;
@@ -41,6 +42,7 @@
 
           .priority {
             font-size: 10px;
+            text-transform: uppercase;
           }
 
           .assignedTo {
@@ -52,6 +54,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            text-transform: uppercase;
           }
         }
       }
@@ -78,7 +81,7 @@
         flex-direction: column;
         gap: 0.5rem 0;
         overflow-y: auto;
-        height: 59vh;
+        max-height: 59vh;
 
         .singleInput {
           display: flex;
@@ -92,6 +95,7 @@
           .taskContent {
             font-size: 16px;
             max-width: 30rem;
+            cursor: pointer;
           }
         }
       }
@@ -135,6 +139,18 @@
       }
     }
   }
+}
+
+.error {
+  text-align: center;
+  color: gray;
+  margin: 5rem 1rem 3rem 1rem;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  margin: 5rem 1rem;
 }
 
 @media only screen and (max-width: 720px) {
