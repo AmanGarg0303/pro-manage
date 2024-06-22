@@ -29,9 +29,14 @@ export const Card = ({ name, tasks }) => {
         />
       </div>
 
-      {tasks?.map((task) => (
-        <Task key={task._id} task={task} />
-      ))}
+      <div
+        className={styles.mainTasks}
+        style={{ overflowY: "auto", height: "100%", paddingRight: "1rem" }}
+      >
+        {tasks?.map((task) => (
+          <Task key={task._id} task={task} />
+        ))}
+      </div>
     </div>
   );
 };

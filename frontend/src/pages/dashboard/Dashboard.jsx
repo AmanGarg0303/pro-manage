@@ -14,10 +14,11 @@ const Dashboard = () => {
   const year = new Date().getFullYear();
 
   const [opened, { open, close }] = useDisclosure();
-
   const { currentUser } = useSelector((state) => state.user);
 
+  const [changeTimePeriod, setChangeTimePeriod] = useState("week");
   const [allTasks, setAllTasks] = useState([]);
+
   useEffect(() => {
     const fetchTasks = async () => {
       const res = await newRequest.get(`task/`);
@@ -41,12 +42,14 @@ const Dashboard = () => {
     done: groupedTasks["done"] || [],
   };
 
-  console.log(tasksArray);
+  console.log(changeTimePeriod);
 
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
-        <h1 style={{ fontSize: "1.4rem" }}>Welcome! {currentUser?.username}</h1>
+        <h1 style={{ fontSize: "1.4rem", textTransform: "capitalize" }}>
+          Welcome! {currentUser?.username}
+        </h1>
         <p style={{ color: "gray", fontSize: "1.2rem" }}>
           {date} {numToMonth(month)}, {year}
         </p>
@@ -64,11 +67,13 @@ const Dashboard = () => {
           <AddPeopleModal open={open} close={close} opened={opened} />
         </div>
 
-        <select>
+        <select
+          style={{ outline: "none", padding: "0 0.3rem" }}
+          value={changeTimePeriod}
+          onChange={(e) => setChangeTimePeriod(e.target.value)}
+        >
           <option value="today">Today</option>
-          <option defaultValue={"week"} value="week">
-            This Week
-          </option>
+          <option value="week">This Week</option>
           <option value="month">This Month</option>
         </select>
       </div>
