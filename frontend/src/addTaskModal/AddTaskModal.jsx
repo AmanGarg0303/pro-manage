@@ -5,17 +5,12 @@ import { GoDotFill } from "react-icons/go";
 import { IoIosAdd } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
 import formatDate from "../utils/formatDate";
+import { useSelector } from "react-redux";
 
 export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
-  const [date, setDate] = useState(null);
-  const dateRef = useRef();
+  const { currentUser } = useSelector((state) => state.user);
 
-  const onDateChnage = (e) => {
-    if (e.target.value) {
-      console.log(e.target.value);
-      setDate(e.target.value);
-    }
-  };
+  const dateRef = useRef();
 
   const openDatePicker = () => {
     if (dateRef.current) {
@@ -24,8 +19,67 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
     }
   };
 
+  const [singleTask, setSingleTask] = useState({
+    title: "",
+    type: "todo",
+    priority: "",
+    checklist: [],
+    assignTo: "",
+    dueDate: "",
+  });
+
+  const handleChangeTitle = (title) => {
+    const newTaskData = { ...singleTask };
+    newTaskData.title = title;
+    setSingleTask({ ...newTaskData });
+  };
+
+  const handleChangePriority = (priority) => {
+    const newTaskData = { ...singleTask };
+    newTaskData.priority = priority;
+    setSingleTask({ ...newTaskData });
+  };
+
+  const handleChangeAssignee = (asignee) => {
+    const newTaskData = { ...singleTask };
+    newTaskData.assignTo = asignee;
+    setSingleTask({ ...newTaskData });
+  };
+
+  const handleAddOption = () => {
+    const newTaskData = { ...singleTask };
+    newTaskData.checklist.push({ checked: false, task: "" });
+    setSingleTask({ ...newTaskData });
+  };
+
+  const handleChangeOptionCheckmark = (i, checkVal) => {
+    const newTaskData = { ...singleTask };
+    newTaskData.checklist[i].checked = checkVal;
+    setSingleTask({ ...newTaskData });
+  };
+
+  const handleChangeOptionTask = (i, taskVal) => {
+    const newTaskData = { ...singleTask };
+    newTaskData.checklist[i].task = taskVal;
+    setSingleTask({ ...newTaskData });
+  };
+
+  const handleDeleteTaskOption = (i) => {
+    const newTaskData = { ...singleTask };
+    newTaskData.checklist.splice(i, 1);
+    setSingleTask({ ...newTaskData });
+  };
+
+  const handleChangeDueDate = (e) => {
+    const newTaskData = { ...singleTask };
+    newTaskData.dueDate = e.target.value;
+    setSingleTask({ ...newTaskData });
+  };
+
   const handleCreateTask = (e) => {
     e.preventDefault();
+
+    console.log(singleTask);
   };
 
   return (
@@ -43,7 +97,12 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
           <label htmlFor="title">
             Title <span className={styles.asterik}>*</span>
           </label>
-          <input type="text" id="title" placeholder="Enter Task Title" />
+          <input
+            onChange={(e) => handleChangeTitle(e.target.value)}
+            type="text"
+            id="title"
+            placeholder="Enter Task Title"
+          />
         </div>
 
         <div className={styles.priorities}>
@@ -51,15 +110,33 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
             Select Priority <span className={styles.asterik}>*</span>
           </p>
 
-          <button className={styles.priority}>
+          <button
+            onClick={() => handleChangePriority("high")}
+            type="button"
+            className={`${styles.priority} ${
+              singleTask.priority === "high" && styles.selectedPriority
+            }`}
+          >
             <GoDotFill fill="#ff2473" />
             <p>HIGH PRIORITY</p>
           </button>
-          <button className={styles.priority}>
+          <button
+            onClick={() => handleChangePriority("moderate")}
+            type="button"
+            className={`${styles.priority} ${
+              singleTask.priority === "moderate" && styles.selectedPriority
+            }`}
+          >
             <GoDotFill fill="#18b0ff" />
             <p>MODERATE PRIORITY</p>
           </button>
-          <button className={styles.priority}>
+          <button
+            onClick={() => handleChangePriority("low")}
+            type="button"
+            className={`${styles.priority} ${
+              singleTask.priority === "low" && styles.selectedPriority
+            }`}
+          >
             <GoDotFill fill="#63c05b" />
             <p>LOW PRIORITY</p>
           </button>
@@ -68,61 +145,59 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
         <div className={styles.assignTo}>
           <p>Assign to</p>
 
-          <select name="" id="">
+          <select
+            onChange={(e) => handleChangeAssignee(e.target.value)}
+            name=""
+            id=""
+          >
             <option value="">Add a assignee</option>
-            <option value="">Brocode</option>
-            <option value="">Amy</option>
-            <option value="">Jake</option>
+            {currentUser?.myAssignies?.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className={styles.addNewTaskContainer}>
           <p>
-            Checklist (1/3) <span className={styles.asterik}>*</span>
+            Checklist (
+            {singleTask?.checklist?.reduce((acc, t) => t.checked + acc, 0)}/
+            {singleTask?.checklist.length}){" "}
+            <span className={styles.asterik}>*</span>
           </p>
 
           <div className={styles.allInputs}>
-            <div className={styles.singleInput}>
-              <div className={styles.mainInp}>
-                <input type="checkbox" />
-                <p className={styles.taskContent}>Task that needs to be done</p>
+            {singleTask.checklist?.map((t, _) => (
+              <div key={_} className={styles.singleInput}>
+                <div className={styles.mainInp}>
+                  <input
+                    type="checkbox"
+                    checked={t.checked}
+                    onChange={(e) =>
+                      handleChangeOptionCheckmark(_, e.target.checked)
+                    }
+                  />
+                  <input
+                    style={{ border: "none", outline: "none", width: "100%" }}
+                    type="text"
+                    className={styles.taskContent}
+                    placeholder="Task content"
+                    value={t?.task}
+                    onChange={(e) => handleChangeOptionTask(_, e.target.value)}
+                  />
+                </div>
+                <RiDeleteBinLine
+                  size={18}
+                  fill="red"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleDeleteTaskOption(_)}
+                />
               </div>
-              <RiDeleteBinLine
-                size={18}
-                fill="red"
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-
-            <div className={styles.singleInput}>
-              <div className={styles.mainInp}>
-                <input type="checkbox" />
-                <p className={styles.taskContent}>Task that needs to be done</p>
-              </div>
-              <RiDeleteBinLine
-                size={18}
-                fill="red"
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-
-            <div className={styles.singleInput}>
-              <div className={styles.mainInp}>
-                <input type="checkbox" />
-                <p className={styles.taskContent}>
-                  Task that needs to be done, but it need to be done
-                  automatically, without any help dqwdjqd ceHI
-                </p>
-              </div>
-              <RiDeleteBinLine
-                size={18}
-                fill="red"
-                style={{ cursor: "pointer" }}
-              />
-            </div>
+            ))}
           </div>
 
-          <div className={styles.addNewTask}>
+          <div className={styles.addNewTask} onClick={handleAddOption}>
             <IoIosAdd size={25} />
             Add New
           </div>
@@ -133,7 +208,7 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
           name="date"
           ref={dateRef}
           style={{ visibility: "hidden", width: "1px", height: "1px" }}
-          onChange={onDateChnage}
+          onChange={handleChangeDueDate}
         />
 
         <div className={styles.btns}>
@@ -143,7 +218,9 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
               type="button"
               className={styles.dueDateBtn}
             >
-              {date ? formatDate(date) : "Select due date"}
+              {singleTask?.dueDate
+                ? formatDate(singleTask?.dueDate)
+                : "Select due date"}
             </button>
           </div>
 

@@ -64,8 +64,6 @@ export const Login = () => {
     }
   };
 
-  console.log(errorResponse);
-
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleLogin}>
