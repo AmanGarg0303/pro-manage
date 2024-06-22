@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./dashboard.module.css";
 import numToMonth from "../../utils/numToMonth";
 import { Card } from "../../components/card/Card";
 import { IoPeopleOutline } from "react-icons/io5";
 import { AddPeopleModal } from "../../components/addPeopleModal/AddPeopleModal";
 import { useSelector } from "react-redux";
+import { useDisclosure } from "@mantine/hooks";
 
 const Dashboard = () => {
   const date = new Date().getDate();
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
 
-  const [openAddPeopleModal, setOpenAddPeopleModal] = useState(false);
+  const [opened, { open, close }] = useDisclosure();
 
   const { currentUser } = useSelector((state) => state.user);
 
@@ -28,18 +29,12 @@ const Dashboard = () => {
         <div className={styles.miniContent}>
           <p className={styles.board}>Board</p>
 
-          <div
-            className={styles.addPeople}
-            onClick={() => setOpenAddPeopleModal(true)}
-          >
+          <div className={styles.addPeople} onClick={open}>
             <IoPeopleOutline />
             <p>Add People</p>
           </div>
 
-          <AddPeopleModal
-            openAddPeopleModal={openAddPeopleModal}
-            setOpenAddPeopleModal={setOpenAddPeopleModal}
-          />
+          <AddPeopleModal open={open} close={close} opened={opened} />
         </div>
 
         <select>

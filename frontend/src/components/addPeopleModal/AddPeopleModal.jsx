@@ -1,19 +1,24 @@
 import React, { useState } from "react";
 import styles from "./addPeopleModal.module.css";
 import { Modal } from "@mantine/core";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import newRequest from "../../utils/newRequest";
+import { updateUser } from "../../redux/userSlice";
 
 export const AddPeopleModal = ({
   openAddPeopleModal,
   setOpenAddPeopleModal,
+  open,
+  close,
+  opened,
 }) => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [compToShow, setCompToShow] = useState(0);
+  const [updatedUser, setUpdatedUser] = useState();
 
   const { currentUser } = useSelector((state) => state.user);
-
-  const [compToShow, setCompToShow] = useState(0);
+  const dispatch = useDispatch();
 
   const handleAddPeople = async (e) => {
     e.preventDefault();
@@ -31,19 +36,28 @@ export const AddPeopleModal = ({
     }
 
     try {
-      await newRequest.put("user/assignee", { email });
-      setCompToShow(1);
+      const res = await newRequest.put("user/assignee", { email });
+      setUpdatedUser(res?.data);
+      setCompToShow((prev) => 1);
     } catch (error) {
       console.log(error);
       setError(error?.response?.data?.message);
     }
   };
 
+  const handleCloseModal = () => {
+    setEmail("");
+    setError("");
+    close();
+    setCompToShow(0);
+    dispatch(updateUser(updatedUser));
+  };
+
   return (
     <Modal
-      opened={openAddPeopleModal}
-      onClose={() => setOpenAddPeopleModal(false)}
-      closeOnClickOutside
+      opened={opened}
+      onClose={close}
+      closeOnClickOutside={false}
       withCloseButton={false}
       centered
       padding={"2rem"}
@@ -64,7 +78,7 @@ export const AddPeopleModal = ({
 
             <div className={styles.btns}>
               <button
-                onClick={() => setOpenAddPeopleModal(false)}
+                onClick={close}
                 type="button"
                 className={styles.cancelBtn}
               >
@@ -83,13 +97,7 @@ export const AddPeopleModal = ({
           </p>
 
           <div className={styles.btns}>
-            <button
-              onClick={() => {
-                setOpenAddPeopleModal(false);
-                setCompToShow(0);
-              }}
-              className={styles.addEmailBtn}
-            >
+            <button onClick={handleCloseModal} className={styles.addEmailBtn}>
               Okay, Got it
             </button>
           </div>

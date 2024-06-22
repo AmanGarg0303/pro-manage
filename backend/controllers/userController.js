@@ -66,9 +66,14 @@ export const assignPeople = async (req, res, next) => {
       return next(createError(400, "This email is already added!"));
     }
 
-    await user.updateOne({ $push: { myAssignies: email } });
+    const newUser = await User.findByIdAndUpdate(
+      user._id,
+      { $push: { myAssignies: email } },
+      { new: true }
+    );
 
-    res.status(200).json({ message: "Assignie added successfully!" });
+    const { password, ...details } = newUser._doc;
+    res.status(200).json(details);
   } catch (error) {
     next(error);
   }
