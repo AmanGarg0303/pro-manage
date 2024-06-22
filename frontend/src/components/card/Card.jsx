@@ -5,7 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 import { Task } from "../task/Task";
 import { AddTaskModal } from "../../addTaskModal/AddTaskModal";
 
-export const Card = ({ name }) => {
+export const Card = ({ name, tasks }) => {
   const [openAddTaskModal, setOpenAddTaskModal] = useState(false);
   return (
     <div className={styles.singleCard}>
@@ -29,12 +29,9 @@ export const Card = ({ name }) => {
         />
       </div>
 
-      <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
+      {tasks?.map((task) => (
+        <Task key={task._id} task={task} />
+      ))}
     </div>
   );
 };

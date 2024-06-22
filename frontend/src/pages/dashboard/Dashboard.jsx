@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import numToMonth from "../../utils/numToMonth";
 import { Card } from "../../components/card/Card";
@@ -6,6 +6,7 @@ import { IoPeopleOutline } from "react-icons/io5";
 import { AddPeopleModal } from "../../components/addPeopleModal/AddPeopleModal";
 import { useSelector } from "react-redux";
 import { useDisclosure } from "@mantine/hooks";
+import newRequest from "../../utils/newRequest";
 
 const Dashboard = () => {
   const date = new Date().getDate();
@@ -15,6 +16,32 @@ const Dashboard = () => {
   const [opened, { open, close }] = useDisclosure();
 
   const { currentUser } = useSelector((state) => state.user);
+
+  const [allTasks, setAllTasks] = useState([]);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const res = await newRequest.get(`task/`);
+      setAllTasks(res?.data);
+    };
+    fetchTasks();
+  }, []);
+
+  const groupedTasks = allTasks.reduce((acc, task) => {
+    if (!acc[task.type]) {
+      acc[task.type] = [];
+    }
+    acc[task.type].push(task);
+    return acc;
+  }, {});
+
+  const tasksArray = {
+    backlog: groupedTasks["backlog"] || [],
+    todo: groupedTasks["todo"] || [],
+    progress: groupedTasks["progress"] || [],
+    done: groupedTasks["done"] || [],
+  };
+
+  console.log(tasksArray);
 
   return (
     <div className={styles.container}>
@@ -47,10 +74,10 @@ const Dashboard = () => {
       </div>
 
       <div className={styles.mainCards}>
-        <Card name="Backlog" />
-        <Card name="To do" />
-        <Card name="In progress" />
-        <Card name="Done" />
+        <Card name="Backlog" tasks={tasksArray.backlog} />
+        <Card name="To do" tasks={tasksArray.todo} />
+        <Card name="In progress" tasks={tasksArray.progress} />
+        <Card name="Done" tasks={tasksArray.done} />
       </div>
     </div>
   );

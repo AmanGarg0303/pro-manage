@@ -5,19 +5,42 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
 import { DeleteTaskModal } from "../deleteTaskModal/DeleteTaskModal";
+import toast from "react-hot-toast";
 
-export const Task = () => {
+export const Task = ({ task }) => {
   const [openTaskSetting, setOpenTaskSetting] = useState(false);
 
   const [openDeleteTaskModal, setOpenDeleteTaskModal] = useState(false);
+
+  const types = ["backlog", "todo", "progress", "done"];
+  const filterType = (excludeType) => {
+    return types.filter((type) => type !== excludeType);
+  };
+
+  const handleShareQuiz = (taskId) => {
+    navigator.clipboard.writeText(`http://localhost:3000/share/${taskId}`);
+
+    toast.success("Link copied to clipboard");
+    setOpenTaskSetting(false);
+  };
 
   return (
     <div className={styles.singleTask}>
       <div className={styles.topbar}>
         <div className={styles.taskPriority}>
-          <GoDotFill fill="pink" />
-          <p className={styles.priority}>HIGH PRIORITY</p>
-          <p className={styles.assignedTo}>AK</p>
+          <GoDotFill
+            fill={
+              task?.priority === "low"
+                ? "#63c05b"
+                : task.priority === "moderate"
+                ? "#18b0ff"
+                : "#ff2473"
+            }
+          />
+          <p className={styles.priority}>{task?.priority} PRIORITY</p>
+          {task?.assignedTo && (
+            <p className={styles.assignedTo}>{task?.assignedTo.slice(2)}</p>
+          )}
         </div>
 
         <HiDotsHorizontal
@@ -29,7 +52,7 @@ export const Task = () => {
         {openTaskSetting && (
           <div className={styles.taskSettings}>
             <p>Edit</p>
-            <p>Share</p>
+            <p onClick={() => handleShareQuiz(task?._id)}>Share</p>
             <p
               style={{ color: "red" }}
               onClick={() => setOpenDeleteTaskModal(true)}
@@ -49,41 +72,35 @@ export const Task = () => {
         <h1 className={styles.taskName}>Hero Section</h1>
 
         <div className={styles.checklistArea}>
-          <p>Checklist (0/3)</p>
+          <p>
+            Checklist ({task?.checklist?.reduce((acc, t) => t.checked + acc, 0)}
+            /{task?.checklist?.length})
+          </p>
 
           <FaAngleDown size={20} className={styles.dropdownUpIcon} />
         </div>
       </div>
 
       <div className={styles.allInputs}>
-        <div className={styles.singleInput}>
-          <input type="checkbox" />
-          <p className={styles.taskContent}>Task that needs to be done</p>
-        </div>
-
-        <div className={styles.singleInput}>
-          <input type="checkbox" />
-          <p className={styles.taskContent}>Task that needs to be done</p>
-        </div>
-
-        <div className={styles.singleInput}>
-          <input type="checkbox" />
-          <p className={styles.taskContent}>
-            Task that needs to be done, but it need to be done automatically,
-            without any help
-          </p>
-        </div>
+        {task?.checklist?.map((t) => (
+          <div className={styles.singleInput} key={t._id}>
+            <input type="checkbox" checked={t?.checked} />
+            <p className={styles.taskContent}>{t?.task}</p>
+          </div>
+        ))}
       </div>
 
       <div className={styles.bottomBar}>
         <div>
-          <button className={styles.btns}>FEB 10th</button>
+          {task?.dueDate && (
+            <button className={styles.btns}>{task?.dueDate}</button>
+          )}
         </div>
 
         <div className={styles.btnsContainer}>
-          <button className={styles.btns}>PROGRESS</button>
-          <button className={styles.btns}>TO DO</button>
-          <button className={styles.btns}>DONE</button>
+          {filterType(task?.type)?.map((_) => (
+            <button className={styles.btns}>{_}</button>
+          ))}
         </div>
       </div>
     </div>
