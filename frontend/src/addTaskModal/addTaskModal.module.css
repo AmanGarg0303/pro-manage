@@ -115,7 +115,7 @@
     justify-content: space-between;
 
     .dueDateBtn {
-      margin-top: 1rem;
+      margin-top: 0.8rem;
       border: 1px solid gray;
       padding: 0.4rem 2.5rem;
       border-radius: 8px;
@@ -126,7 +126,7 @@
     }
 
     .cancelBtn {
-      margin-top: 1rem;
+      margin-top: 0.8rem;
       border: 1px solid var(--btn-red);
       padding: 0.4rem 3rem;
       border-radius: 8px;
@@ -137,7 +137,7 @@
     }
 
     .saveBtn {
-      margin-top: 1rem;
+      margin-top: 0.8rem;
       margin-left: 1rem;
       background-color: var(--primary-blue);
       padding: 0.4rem 3rem;
@@ -155,4 +155,10 @@
 
 .asterik {
   color: red;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  text-align: center;
 }

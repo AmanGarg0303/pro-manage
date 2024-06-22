@@ -9,6 +9,7 @@ export const createTask = async (req, res, next) => {
     }
 
     const { type, title, priority, assignedTo, checklist, dueDate } = req.body;
+
     if (!type || !title || !priority || !checklist) {
       return next(createError(400, "All fields are requiered!"));
     }

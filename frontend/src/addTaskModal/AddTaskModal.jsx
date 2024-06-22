@@ -6,6 +6,9 @@ import { IoIosAdd } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
 import formatDate from "../utils/formatDate";
 import { useSelector } from "react-redux";
+import newRequest from "../utils/newRequest";
+import toast from "react-hot-toast";
+import { LoadingSVG } from "../assets/LoadingSvg";
 
 export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -76,10 +79,59 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
     setSingleTask({ ...newTaskData });
   };
 
-  const handleCreateTask = (e) => {
+  const [showError, setShowError] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleReset = () => {
+    setShowError(false);
+    setErrorMessage("");
+    //  dateRef.current = null;
+    setSingleTask({
+      title: "",
+      type: "todo",
+      priority: "",
+      checklist: [],
+      assignTo: "",
+      dueDate: "",
+    });
+    setOpenAddTaskModal(false);
+  };
+
+  const handleCreateTask = async (e) => {
     e.preventDefault();
 
-    console.log(singleTask);
+    let error = singleTask?.checklist.some(
+      (t) => t.checked === "" || t.task === ""
+    );
+
+    if (!singleTask.title || !singleTask.type || !singleTask.priority) {
+      error = true;
+    }
+
+    if (singleTask?.checklist?.length < 1) {
+      setShowError(true);
+      setErrorMessage("You need to have atleast 1 task.");
+      return;
+    }
+
+    if (error) {
+      setShowError(true);
+      setErrorMessage("Please fill all the marked fields.");
+      return;
+    }
+
+    setShowError(false);
+    setErrorMessage("");
+
+    try {
+      const res = await newRequest.post(`task/create`, singleTask);
+      toast.success(res?.data?.message);
+      handleReset();
+    } catch (error) {
+      setShowError(true);
+      setErrorMessage(error?.response?.data?.message);
+      console.log(error);
+    }
   };
 
   return (
@@ -211,6 +263,8 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
           onChange={handleChangeDueDate}
         />
 
+        {showError && <div className={styles.error}>{errorMessage}</div>}
+
         <div className={styles.btns}>
           <div>
             <button
@@ -226,7 +280,7 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
 
           <div>
             <button
-              onClick={() => setOpenAddTaskModal(false)}
+              onClick={handleReset}
               type="button"
               className={styles.cancelBtn}
             >
