@@ -8,7 +8,7 @@ export const createTask = async (req, res, next) => {
       return next(createError(404, "User not found!"));
     }
 
-    const { type, title, priority, assignedTo, checklist, dueDate } = req.body;
+    const { type, title, priority, assignTo, checklist, dueDate } = req.body;
 
     if (!type || !title || !priority || !checklist) {
       return next(createError(400, "All fields are requiered!"));
@@ -21,7 +21,7 @@ export const createTask = async (req, res, next) => {
       title,
       checklist,
       dueDate,
-      assignedTo,
+      assignedTo: assignTo,
     });
 
     await newTask.save();

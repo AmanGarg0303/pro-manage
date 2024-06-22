@@ -39,7 +39,9 @@ export const Task = ({ task }) => {
           />
           <p className={styles.priority}>{task?.priority} PRIORITY</p>
           {task?.assignedTo && (
-            <p className={styles.assignedTo}>{task?.assignedTo.slice(2)}</p>
+            <p title={task?.assignedTo} className={styles.assignedTo}>
+              {task?.assignedTo.slice(0, 2)}
+            </p>
           )}
         </div>
 
@@ -69,7 +71,9 @@ export const Task = ({ task }) => {
       </div>
 
       <div className={styles.header}>
-        <h1 className={styles.taskName}>Hero Section</h1>
+        <h1 title={task?.title} className={styles.taskName}>
+          {task?.title}
+        </h1>
 
         <div className={styles.checklistArea}>
           <p>
