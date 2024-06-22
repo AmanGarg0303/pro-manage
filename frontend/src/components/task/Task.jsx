@@ -20,7 +20,7 @@ export const Task = ({ task }) => {
   const handleShareQuiz = (taskId) => {
     navigator.clipboard.writeText(`http://localhost:3000/share/${taskId}`);
 
-    toast.success("Link copied to clipboard");
+    toast.success("Link copied!");
     setOpenTaskSetting(false);
   };
 

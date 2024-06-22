@@ -20,15 +20,15 @@
     justify-content: center;
     border: 2px solid rgb(215, 207, 207);
     margin: 1rem auto;
-    width: fit-content;
     border-radius: 8px;
+    max-width: 25rem;
 
     .singleTask {
       padding: 0.4rem 0.8rem;
       border-radius: 8px;
       background-color: white;
       margin: 0.6rem 0;
-      min-width: 22rem;
+      min-width: 15rem;
 
       .topbar {
         position: relative;
@@ -101,6 +101,7 @@
             font-size: 16px;
             max-width: 30rem;
             cursor: pointer;
+            line-height: 22px;
           }
         }
       }
