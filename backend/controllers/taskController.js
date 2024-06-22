@@ -45,6 +45,23 @@ export const getTask = async (req, res, next) => {
   }
 };
 
+export const getUserTasks = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return next(createError(404, "User not found!"));
+    }
+
+    const myTasks = await Task.find({
+      $or: [{ userId: user._id }, { assignedTo: user.email }],
+    });
+
+    res.status(200).json(myTasks);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // {
 //     "type":"todo",
 //     "title":"My First Task",
