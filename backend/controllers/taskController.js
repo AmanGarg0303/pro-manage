@@ -62,6 +62,39 @@ export const getUserTasks = async (req, res, next) => {
   }
 };
 
+export const updateCheckListTask = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return next(createError(404, "User not found!"));
+    }
+
+    const { taskId, checkId } = req.params;
+    const { data } = req.body;
+
+    const filter = {
+      _id: taskId,
+      "checklist._id": checkId,
+    };
+    const updateDoc = {
+      $set: { "checklist.$.checked": data },
+    };
+
+    const result = await Task.updateOne(filter, updateDoc);
+    console.log(result);
+
+    // if (result.matchedCount > 0) {
+    //   console.log(`Successfully updated task`);
+    // } else {
+    //   console.log(`Task not found`);
+    // }
+
+    res.status(200).json({ message: "Task updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // {
 //     "type":"todo",
 //     "title":"My First Task",
