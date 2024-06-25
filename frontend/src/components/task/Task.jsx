@@ -46,6 +46,8 @@ export const Task = ({ task }) => {
     }
   };
 
+  const [showChecklist, setShowChecklist] = useState(false);
+
   return (
     <div className={styles.singleTask}>
       <div className={styles.topbar}>
@@ -103,24 +105,37 @@ export const Task = ({ task }) => {
             /{task?.checklist?.length})
           </p>
 
-          <FaAngleDown size={20} className={styles.dropdownUpIcon} />
+          {showChecklist ? (
+            <FaAngleDown
+              onClick={() => setShowChecklist(!showChecklist)}
+              size={20}
+              className={styles.dropdownUpIcon}
+            />
+          ) : (
+            <FaAngleUp
+              onClick={() => setShowChecklist(!showChecklist)}
+              size={20}
+              className={styles.dropdownUpIcon}
+            />
+          )}
         </div>
       </div>
 
-      <div className={styles.allInputs}>
-        {task?.checklist?.map((t) => (
-          <div className={styles.singleInput} key={t._id}>
-            <input
-              type="checkbox"
-              checked={t?.checked}
-              onChange={(e) => {}}
-              onClick={(e) => handleChangeCheckmark(e.target.checked, t._id)}
-            />
-            <p className={styles.taskContent}>{t?.task}</p>
-          </div>
-        ))}
-      </div>
-
+      {showChecklist && (
+        <div className={styles.allInputs}>
+          {task?.checklist?.map((t) => (
+            <div className={styles.singleInput} key={t._id}>
+              <input
+                type="checkbox"
+                checked={t?.checked}
+                onChange={(e) => {}}
+                onClick={(e) => handleChangeCheckmark(e.target.checked, t._id)}
+              />
+              <p className={styles.taskContent}>{t?.task}</p>
+            </div>
+          ))}
+        </div>
+      )}
       <div className={styles.bottomBar}>
         <div>
           {task?.dueDate && (
