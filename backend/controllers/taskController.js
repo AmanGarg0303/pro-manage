@@ -47,6 +47,28 @@ export const getTask = async (req, res, next) => {
 
 export const getUserTasks = async (req, res, next) => {
   try {
+    const queryParams = new URLSearchParams(req.query);
+
+    let startDate;
+    const endDate = new Date();
+
+    switch (queryParams.get("filter")) {
+      case "today":
+        startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case "week":
+        startDate = new Date();
+        startDate.setDate(startDate.getDate() - 7);
+        break;
+      case "month":
+        startDate = new Date();
+        startDate.setMonth(startDate.getMonth() - 1);
+        break;
+      default:
+        return res.status(400).json({ error: "Invalid period specified" });
+    }
+
     const user = req.user;
     if (!user) {
       return next(createError(404, "User not found!"));
@@ -54,7 +76,11 @@ export const getUserTasks = async (req, res, next) => {
 
     const myTasks = await Task.find({
       $or: [{ userId: user._id }, { assignedTo: user.email }],
-    });
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    }).sort({ createdAt: -1 });
 
     res.status(200).json(myTasks);
   } catch (error) {
@@ -81,7 +107,7 @@ export const updateCheckListTask = async (req, res, next) => {
     };
 
     const result = await Task.updateOne(filter, updateDoc);
-    console.log(result);
+    // console.log(result);
 
     // if (result.matchedCount > 0) {
     //   console.log(`Successfully updated task`);

@@ -21,11 +21,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const res = await newRequest.get(`task/`);
+      const res = await newRequest.get(`task/?filter=${changeTimePeriod}`);
       setAllTasks(res?.data);
     };
     fetchTasks();
-  }, []);
+  }, [changeTimePeriod]);
 
   const groupedTasks = allTasks.reduce((acc, task) => {
     if (!acc[task.type]) {
