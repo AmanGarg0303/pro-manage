@@ -6,10 +6,10 @@ import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
 import { DeleteTaskModal } from "../deleteTaskModal/DeleteTaskModal";
 import toast from "react-hot-toast";
+import newRequest from "../../utils/newRequest";
 
 export const Task = ({ task }) => {
   const [openTaskSetting, setOpenTaskSetting] = useState(false);
-
   const [openDeleteTaskModal, setOpenDeleteTaskModal] = useState(false);
 
   const types = ["backlog", "todo", "progress", "done"];
@@ -22,6 +22,19 @@ export const Task = ({ task }) => {
 
     toast.success("Link copied!");
     setOpenTaskSetting(false);
+  };
+
+  const handleChangeCheckmark = async (done, checkId) => {
+    try {
+      const res = await newRequest.patch(`task/${task._id}/${checkId}`, {
+        data: done,
+      });
+      window.location.reload();
+
+      toast.success(res?.data?.message);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -88,7 +101,12 @@ export const Task = ({ task }) => {
       <div className={styles.allInputs}>
         {task?.checklist?.map((t) => (
           <div className={styles.singleInput} key={t._id}>
-            <input type="checkbox" checked={t?.checked} />
+            <input
+              type="checkbox"
+              checked={t?.checked}
+              onChange={(e) => {}}
+              onClick={(e) => handleChangeCheckmark(e.target.checked, t._id)}
+            />
             <p className={styles.taskContent}>{t?.task}</p>
           </div>
         ))}
@@ -103,7 +121,9 @@ export const Task = ({ task }) => {
 
         <div className={styles.btnsContainer}>
           {filterType(task?.type)?.map((_) => (
-            <button className={styles.btns}>{_}</button>
+            <button key={_} className={styles.btns}>
+              {_}
+            </button>
           ))}
         </div>
       </div>
