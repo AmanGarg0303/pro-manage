@@ -37,6 +37,15 @@ export const Task = ({ task }) => {
     }
   };
 
+  const handleShiftTask = async (whereTo) => {
+    try {
+      await newRequest.patch(`task/shift/${task._id}/?filter=${whereTo}`);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.singleTask}>
       <div className={styles.topbar}>
@@ -121,7 +130,11 @@ export const Task = ({ task }) => {
 
         <div className={styles.btnsContainer}>
           {filterType(task?.type)?.map((_) => (
-            <button key={_} className={styles.btns}>
+            <button
+              key={_}
+              className={styles.btns}
+              onClick={() => handleShiftTask(_)}
+            >
               {_}
             </button>
           ))}

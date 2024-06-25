@@ -121,6 +121,20 @@ export const updateCheckListTask = async (req, res, next) => {
   }
 };
 
+export const shiftTask = async (req, res, next) => {
+  try {
+    const queryParams = new URLSearchParams(req.query);
+    const filter = queryParams.get("filter");
+
+    const { taskId } = req.params;
+    await Task.findByIdAndUpdate(taskId, { type: filter }, { new: true });
+
+    res.status(200).json({ message: "Task updated successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // {
 //     "type":"todo",
 //     "title":"My First Task",

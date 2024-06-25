@@ -42,8 +42,6 @@ const Dashboard = () => {
     done: groupedTasks["done"] || [],
   };
 
-  console.log(changeTimePeriod);
-
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
