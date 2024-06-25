@@ -135,6 +135,53 @@ export const shiftTask = async (req, res, next) => {
   }
 };
 
+export const taskAnalytics = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return next(createError(404, "User not found!"));
+    }
+
+    const allTasks = await Task.find({
+      $or: [{ userId: user._id }, { assignedTo: user.email }],
+    });
+
+    const counts = {
+      priority: {
+        low: 0,
+        moderate: 0,
+        high: 0,
+      },
+      status: {
+        backlog: 0,
+        todo: 0,
+        progress: 0,
+        done: 0,
+      },
+      dueDateTasks: 0,
+    };
+
+    allTasks.forEach((item) => {
+      if (item.priority === "low") counts.priority.low++;
+      if (item.priority === "moderate") counts.priority.moderate++;
+      if (item.priority === "high") counts.priority.high++;
+
+      // Count status
+      if (item.type === "backlog") counts.status.backlog++;
+      if (item.type === "todo") counts.status.todo++;
+      if (item.type === "progress") counts.status.progress++;
+      if (item.type === "done") counts.status.done++;
+
+      // Count due date tasks
+      if (item.dueDate) counts.dueDateTasks++;
+    });
+
+    res.status(200).json(counts);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // {
 //     "type":"todo",
 //     "title":"My First Task",

@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./analytics.module.css";
 import { GoDotFill } from "react-icons/go";
 import padStartFxn from "../../utils/padStartFxn";
+import newRequest from "../../utils/newRequest";
 
 const Analytics = () => {
+  const [taskAnalytics, setTaskAnalytics] = useState({});
+
+  useEffect(() => {
+    const fetchD = async () => {
+      try {
+        const res = await newRequest.get(`task/analytics`);
+        setTaskAnalytics(res?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchD();
+  }, []);
+
   return (
     <div className={styles.container}>
       <h2>Analytics</h2>
@@ -15,7 +31,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               Backlog Tasks
             </p>
-            <strong>{padStartFxn(1)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.status?.backlog)}</strong>
           </div>
 
           <div className={styles.singleAnalytic}>
@@ -23,7 +39,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               To-do Tasks
             </p>
-            <strong>{padStartFxn(50)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.status?.todo)}</strong>
           </div>
 
           <div className={styles.singleAnalytic}>
@@ -31,7 +47,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               In-progress Tasks
             </p>
-            <strong>{padStartFxn(100)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.status?.progress)}</strong>
           </div>
 
           <div className={styles.singleAnalytic}>
@@ -39,7 +55,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               Completed Tasks
             </p>
-            <strong>{padStartFxn(4)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.status?.done)}</strong>
           </div>
         </div>
 
@@ -49,7 +65,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               Low Priority
             </p>
-            <strong>{padStartFxn(45)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.priority?.low)}</strong>
           </div>
 
           <div className={styles.singleAnalytic}>
@@ -57,7 +73,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               Moderate Priority
             </p>
-            <strong>{padStartFxn(16)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.priority?.moderate)}</strong>
           </div>
 
           <div className={styles.singleAnalytic}>
@@ -65,7 +81,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               High-priority
             </p>
-            <strong>{padStartFxn(9)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.priority?.high)}</strong>
           </div>
 
           <div className={styles.singleAnalytic}>
@@ -73,7 +89,7 @@ const Analytics = () => {
               <GoDotFill fill="#91c5cc" />
               Due Date Tasks
             </p>
-            <strong>{padStartFxn(7)}</strong>
+            <strong>{padStartFxn(taskAnalytics?.dueDateTasks)}</strong>
           </div>
         </div>
       </div>

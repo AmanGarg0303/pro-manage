@@ -5,6 +5,7 @@ import {
   getTask,
   getUserTasks,
   shiftTask,
+  taskAnalytics,
   updateCheckListTask,
 } from "../controllers/taskController.js";
 const router = express.Router();
@@ -12,6 +13,8 @@ const router = express.Router();
 router.post("/create", protect, createTask);
 
 router.get("/", protect, getUserTasks);
+
+router.get("/analytics", protect, taskAnalytics);
 
 router.get("/:taskId", getTask);
 
