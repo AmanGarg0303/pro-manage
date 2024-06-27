@@ -194,23 +194,24 @@ export const AddTaskModal = ({ openAddTaskModal, setOpenAddTaskModal }) => {
           </button>
         </div>
 
-        <div className={styles.assignTo}>
-          <p>Assign to</p>
+        {currentUser?.myAssignies.length > 0 && (
+          <div className={styles.assignTo}>
+            <p>Assign to</p>
 
-          <select
-            onChange={(e) => handleChangeAssignee(e.target.value)}
-            name=""
-            id=""
-          >
-            <option value="">Add a assignee</option>
-            {currentUser?.myAssignies?.map((a) => (
-              <option key={a} value={a}>
-                {a}
-              </option>
-            ))}
-          </select>
-        </div>
-
+            <select
+              onChange={(e) => handleChangeAssignee(e.target.value)}
+              name=""
+              id=""
+            >
+              <option value="">Add a assignee</option>
+              {currentUser?.myAssignies?.map((a) => (
+                <option key={a} value={a}>
+                  {a}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div className={styles.addNewTaskContainer}>
           <p>
             Checklist (
